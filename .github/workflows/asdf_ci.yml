@@ -1,0 +1,54 @@
+name: ASDF CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  plugin-test:
+    strategy:
+      matrix:
+        os:
+          - ubuntu-16.04  # ubuntu-earliest
+          - ubuntu-latest
+          - macos-10.15  # macos-earliest
+          - macos-latest
+        version:  # all major versions
+          - 'latest:0'
+          - 'latest:1'
+          - 'latest:2'
+          - 'latest:3'
+          - 'latest:4'
+          - 'latest:5'
+          - 'latest:6'
+          - 'latest'
+    runs-on: ${{ matrix.os }}
+    steps:
+      # Configures the node version used on GitHub-hosted runners
+      - uses: actions/setup-node@v1
+        with:
+          # The Node.js version to configure
+          node-version: ${{ matrix.node }}
+      - name: Test plugin
+        uses: asdf-vm/actions/plugin-test@v1
+        with:
+          command: container-structure-test version
+          version: ${{ matrix.version }}
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Run ShellCheck
+        run: shellcheck bin/*
+  format:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Install shfmt
+        run: brew install shfmt
+      - name: Run shfmt
+        run: shfmt -d -i 2 -ci .
