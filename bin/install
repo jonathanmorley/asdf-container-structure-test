@@ -2,32 +2,6 @@
 
 set -Eeuo pipefail
 
-if [[ "${ASDF_INSTALL_TYPE:-version}" == 'ref' ]]; then
-  echo >&2 "⛔ This plugin does not support installing by ref."
-  exit 1
-fi
-
-if [[ "$OSTYPE" == "darwin"* ]]; then
-  platform="darwin"
-elif [[ "${OSTYPE}" == "linux"* ]]; then
-  platform="linux"
-else
-  echo >&2 "Unsupported platform: ${OSTYPE}."
-  exit 1
-fi
-
-if [[ $(uname -m) == "x86_64" ]]; then
-  arch="amd64"
-else
-  echo >&2 "Unsupported architecture: $(uname -m)."
-  exit 1
-fi
-
-mkdir -p "${ASDF_INSTALL_PATH}"
-
-echo "Downloading container-structure-test v${ASDF_INSTALL_VERSION}"
-
-curl --silent --fail --show-error --location "$@" \
-  "https://storage.googleapis.com/container-structure-test/v${ASDF_INSTALL_VERSION}/container-structure-test-${platform}-${arch}" \
-  -o "${ASDF_INSTALL_PATH}/container-structure-test"
-chmod +x "${ASDF_INSTALL_PATH}/container-structure-test"
+mkdir -p "${ASDF_INSTALL_PATH}/bin"
+cp "${ASDF_DOWNLOAD_PATH}/container-structure-test" "${ASDF_INSTALL_PATH}/bin"
+chmod +x "${ASDF_INSTALL_PATH}/bin/container-structure-test"
