@@ -11,7 +11,7 @@ jobs:
     strategy:
       matrix:
         os:
-          - ubuntu-16.04 # ubuntu-earliest
+          - ubuntu-18.04 # ubuntu-earliest
           - ubuntu-latest
           - macos-10.15 # macos-earliest
           - macos-latest
