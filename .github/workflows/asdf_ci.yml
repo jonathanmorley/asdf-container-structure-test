@@ -17,6 +17,7 @@ jobs:
           - macos-latest
         version:  # all major versions
           - 'latest:0'
+          - 'latest:1'
           - 'latest'
     runs-on: ${{ matrix.os }}
     steps:
