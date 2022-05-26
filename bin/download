@@ -27,14 +27,18 @@ mkdir -p "${ASDF_DOWNLOAD_PATH}"
 
 echo "Downloading container-structure-test v${ASDF_INSTALL_VERSION}"
 
-{
-  # Try downloading with the leading `v`
+if [[ "${ASDF_INSTALL_VERSION}" == "0."* ]] || [[ "${ASDF_INSTALL_VERSION}" == "1.0."* ]] || [[ "${ASDF_INSTALL_VERSION}" == "1.1."* ]]; then
+  if [[ "${platform}" == "linux" ]] && [[ "${arch}" == "amd64" ]]; then
+    # Try downloading with the platform and architecture (>= v1.2.0)
+    curl --silent --fail --show-error --location \
+      "https://storage.googleapis.com/container-structure-test/v${ASDF_INSTALL_VERSION}/container-structure-test" \
+      -o "${ASDF_DOWNLOAD_PATH}/container-structure-test"
+  else
+    echo >&2 "v${ASDF_INSTALL_VERSION} only supports linux and amd64."
+    exit 1
+  fi
+else
   curl --silent --fail --show-error --location \
     "https://storage.googleapis.com/container-structure-test/v${ASDF_INSTALL_VERSION}/container-structure-test-${platform}-${arch}" \
     -o "${ASDF_DOWNLOAD_PATH}/container-structure-test"
-} || {
-  # Try downloading without the leading `v`
-  curl --silent --fail --show-error --location \
-    "https://storage.googleapis.com/container-structure-test/${ASDF_INSTALL_VERSION}/container-structure-test-${platform}-${arch}" \
-    -o "${ASDF_DOWNLOAD_PATH}/container-structure-test"
-}
+fi
