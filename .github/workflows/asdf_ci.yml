@@ -16,7 +16,9 @@ jobs:
           - macos-10.15 # macos-earliest
           - macos-latest
         version: # all major versions
-          - "latest:0"
+          # Lowest version that supports the version argument,
+          # also tests the older download method
+          - '1.0.0'  
           - "latest:1"
           - "latest"
     runs-on: ${{ matrix.os }}
