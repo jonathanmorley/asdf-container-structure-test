@@ -2,11 +2,6 @@
 
 set -Eeuo pipefail
 
-# See https://github.com/asdf-vm/asdf/blob/master/docs/plugins-create.md#github-api-rate-limiting
-function fetch() {
-  curl --verbose --silent --fail --show-error --location "$@"
-}
-
 if [[ "${ASDF_INSTALL_TYPE:-version}" == 'ref' ]]; then
   echo >&2 "⛔ This plugin does not support installing by ref."
   exit 1
@@ -29,11 +24,11 @@ else
   exit 1
 fi
 
-mkdir -p "${ASDF_DOWNLOAD_PATH}"
+mkdir -p "${ASDF_INSTALL_PATH}"
 
 echo "Downloading container-structure-test v${ASDF_INSTALL_VERSION}"
 
-fetch \
+curl --silent --fail --show-error --location "$@" \
   "https://storage.googleapis.com/container-structure-test/v${ASDF_INSTALL_VERSION}/container-structure-test-${platform}-${arch}" \
-  -o "${ASDF_DOWNLOAD_PATH}/container-structure-test"
-chmod +x "${ASDF_DOWNLOAD_PATH}/container-structure-test"
+  -o "${ASDF_INSTALL_PATH}/container-structure-test"
+chmod +x "${ASDF_INSTALL_PATH}/container-structure-test"
