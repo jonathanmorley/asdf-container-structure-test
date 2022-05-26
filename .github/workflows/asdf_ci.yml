@@ -11,14 +11,14 @@ jobs:
     strategy:
       matrix:
         os:
-          - ubuntu-16.04  # ubuntu-earliest
+          - ubuntu-16.04 # ubuntu-earliest
           - ubuntu-latest
-          - macos-10.15  # macos-earliest
+          - macos-10.15 # macos-earliest
           - macos-latest
-        version:  # all major versions
-          - 'latest:0'
-          - 'latest:1'
-          - 'latest'
+        version: # all major versions
+          - "latest:0"
+          - "latest:1"
+          - "latest"
     runs-on: ${{ matrix.os }}
     steps:
       # Configures the node version used on GitHub-hosted runners
@@ -39,11 +39,13 @@ jobs:
       - name: Run ShellCheck
         run: shellcheck bin/*
   format:
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-      - name: Install shfmt
-        run: brew install shfmt
-      - name: Run shfmt
-        run: shfmt -d -i 2 -ci .
+      - name: Install prettier and sh plugin
+        run: npm install -g prettier prettier-plugin-sh
+      - name: Run prettier
+        run: prettier --check .
+      - name: Run prettier on bin
+        run: prettier --check --parser sh 'bin/**'

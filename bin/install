@@ -7,8 +7,7 @@ if [[ "${ASDF_INSTALL_TYPE:-version}" == 'ref' ]]; then
   exit 1
 fi
 
-if
- [[ "$OSTYPE" == "darwin"* ]]; then
+if [[ "$OSTYPE" == "darwin"* ]]; then
   platform="darwin"
 elif [[ "${OSTYPE}" == "linux"* ]]; then
   platform="linux"

@@ -7,13 +7,19 @@ function fetch() {
   curl --silent --fail --show-error --location ${GITHUB_API_TOKEN:+-H "Authorization: token ${GITHUB_API_TOKEN}"} "$@"
 }
 
+# This function does the following:
+# 1. finds the link header with `grep`
+# 2. extracts the value of the header with `cut`
+# 3. splits the links with `tr`
+# 4. finds the `next` link with `grep`
+# 5. extracts the URL from between angle-brackets with `awk`
 function get_next() {
-  fetch --head "$@" |
-    grep -i "^link" |           # find the link header
-    cut -d: -f2- |              # value of the header
-    tr , \\n |                  # split the links
-    grep 'rel="next"' |         # find the next link
-    awk -F '<|>' '{ print $2 }' # extract URL from between angle-brackets
+  fetch --head "$@" \
+    | grep -i "^link" \
+    | cut -d: -f2- \
+    | tr , \\n \
+    | grep 'rel="next"' \
+    | awk -F '<|>' '{ print $2 }'
 }
 
 function fetch_paged() {
@@ -26,14 +32,20 @@ function fetch_paged() {
 }
 
 function sort_versions() {
-  sed 'h; s/[+-]/./g; s/.p\([[:digit:]]\)/.z\1/; s/$/.z/; G; s/\n/ /' |
-    LC_ALL=C sort -t. -k 1,1 -k 2,2n -k 3,3n -k 4,4n -k 5,5n |
-    awk '{print $2}'
+  sed 'h; s/[+-]/./g; s/.p\([[:digit:]]\)/.z\1/; s/$/.z/; G; s/\n/ /' \
+    | LC_ALL=C sort -t. -k 1,1 -k 2,2n -k 3,3n -k 4,4n -k 5,5n \
+    | awk '{print $2}'
 }
 
-fetch_paged "https://api.github.com/repos/GoogleContainerTools/container-structure-test/releases" |
-  grep -Eo '"tag_name":\s*"[^"]+"' | # find tags
-  cut -d\" -f4 |                     # get value from within second pair of quotes
-  cut -c2- |                         # remove leading 'v'
-  sort_versions |                    # sort
-  xargs                              # remove newlines
+# This function does the following:
+# 1. finds tags with `grep`
+# 2. extracts the value within the second pair of quotes with `cut`
+# 3. removes the leading 'v' with `cut`
+# 4. naturally sorts the versions with `sort`
+# 5. replaces newlines for spaces with `xargs`
+fetch_paged "https://api.github.com/repos/GoogleContainerTools/container-structure-test/releases" \
+  | grep -Eo '"tag_name":\s*"[^"]+"' \
+  | cut -d\" -f4 \
+  | cut -c2- \
+  | sort_versions \
+  | xargs
