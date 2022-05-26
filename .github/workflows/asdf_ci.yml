@@ -21,6 +21,12 @@ jobs:
           - "1.0.0"
           - "latest:1"
           - "latest"
+        exclude:
+          # v1.2.0 adds support for macos
+          - os: macos-10.15
+            version: "1.0.0"
+          - os: macos-latest
+            version: "1.0.0"
     runs-on: ${{ matrix.os }}
     steps:
       # Configures the node version used on GitHub-hosted runners
