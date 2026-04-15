@@ -30,7 +30,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       # Configures the node version used on GitHub-hosted runners
-      - uses: actions/setup-node@v1
+      - uses: actions/setup-node@fc9ff49b90869a686df00e922af871c12215986a # v1.0.4
         with:
           # The Node.js version to configure
           node-version: ${{ matrix.node }}
