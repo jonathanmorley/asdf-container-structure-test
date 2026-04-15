@@ -35,7 +35,7 @@ jobs:
           # The Node.js version to configure
           node-version: ${{ matrix.node }}
       - name: Test plugin
-        uses: asdf-vm/actions/plugin-test@v1
+        uses: asdf-vm/actions/plugin-test@b7bcd026f18772e44fe1026d729e1611cc435d47 # v4.0.1
         with:
           command: container-structure-test version
           version: ${{ matrix.version }}
