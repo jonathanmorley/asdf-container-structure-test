@@ -30,12 +30,12 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       # Configures the node version used on GitHub-hosted runners
-      - uses: actions/setup-node@v1
+      - uses: actions/setup-node@f1f314fca9dfce2769ece7d933488f076716723e # v1
         with:
           # The Node.js version to configure
           node-version: ${{ matrix.node }}
       - name: Test plugin
-        uses: asdf-vm/actions/plugin-test@v1
+        uses: asdf-vm/actions/plugin-test@707e84f3ee349548310aeabdad0dd3bfcb9b69fa # v1
         with:
           command: container-structure-test version
           version: ${{ matrix.version }}
@@ -43,14 +43,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@0717577d45739eb3c851188b29f50ed6c0b2194e # v2
       - name: Run ShellCheck
         run: shellcheck bin/*
   format:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@0717577d45739eb3c851188b29f50ed6c0b2194e # v2
       - name: Install prettier and sh plugin
         run: npm install -g prettier prettier-plugin-sh
       - name: Run prettier
